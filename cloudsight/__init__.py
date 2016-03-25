@@ -1,5 +1,5 @@
 __version__ = '1.0.0'
-__author__ = 'Cloudsight'
+__author__ = 'CloudSight'
 __license__ = 'MIT'
 
 from cloudsight.api import API

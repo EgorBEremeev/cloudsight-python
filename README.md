@@ -1,4 +1,4 @@
-Cloudsight API for Python
+CloudSight API for Python
 =========================
 
 [![Version](http://img.shields.io/pypi/v/cloudsight.svg?style=flat)](https://pypi.python.org/pypi/cloudsight)

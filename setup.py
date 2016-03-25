@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 
 LONG_DESCRIPTION = """\
-Cloudsight API for Python
+CloudSight API for Python
 =========================
 
 A simple CloudSight API Client for Python programming language. It has been
@@ -12,10 +12,10 @@ tested with Python versions 2.7 and 3.5."""
 setup(
     name='cloudsight',
     version='0.9',
-    description='Cloudsight API library for Python',
+    description='CloudSight API library for Python',
     long_description=LONG_DESCRIPTION,
     license='MIT',
-    author='Cloudsight',
+    author='CloudSight',
     author_email='miGlanz@gmail.com',
     url='https://github.com/cloudsight/cloudsight-python',
     packages=find_packages(),

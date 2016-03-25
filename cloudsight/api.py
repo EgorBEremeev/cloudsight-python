@@ -127,7 +127,7 @@ class API(object):
         method which does this automatically.
 
         :param image_url: Image URL.
-        :param params: Additional parameters for Cloudsight API.
+        :param params: Additional parameters for CloudSight API.
         """
         data = self._init_data(params)
         data['image_request[remote_image_url]'] = image_url

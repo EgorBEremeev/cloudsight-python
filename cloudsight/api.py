@@ -30,15 +30,15 @@ STATUS_COMPLETED = 'completed'
 STATUS_NOT_FOUND = 'not found'
 
 # Image couldn't be recognized because of a specific reason. Check the
-# SkipReason field.
+# `reason` field.
 STATUS_SKIPPED = 'skipped'
 
 # Recognition process exceeded the allowed TTL setting.
 STATUS_TIMEOUT = 'timeout'
 
 
-# The API may choose not to return any response for given image. SkipReason type
-# includes possible reasons for such behavior.
+# The API may choose not to return any response for given image. Below constants
+# include possible reasons for such behavior.
 
 # Offensive image content.
 REASON_OFFENSIVE = 'offensive'
@@ -63,7 +63,10 @@ class API(object):
     def __init__(self, auth):
         """
         API instance constructor.
-        :param auth: instance of Auththorization handler (SimpleAuth or OAuth)
+
+        :param auth: Instance of Auththorization handler
+                     (:py:class:`cloudsight.SimpleAuth`
+                     or :py:class:`cloudsight.OAuth`).
         """
         self.auth = auth
 
@@ -92,11 +95,16 @@ class API(object):
         params parameter is optional.
         
         On success this method will immediately return a job information. Its
-        status will initially be "not completed" as it usually takes 6-12
-        seconds for the server to process an image. In order to retrieve the
-        annotation data, you need to keep updating the job status using the
-        image_response() method until the status changes. You may also use the
-        wait() method which does this automatically.
+        status will initially be :py:data:`cloudsight.STATUS_NOT_COMPLETED` as
+        it usually takes 6-12 seconds for the server to process an image. In
+        order to retrieve the annotation data, you need to keep updating the job
+        status using the :py:meth:`cloudsight.API.image_response` method until
+        the status changes. You may also use the :py:meth:`cloudsight.API.wait`
+        method which does this automatically.
+
+        :param image: File-like object containing the image data.
+        :param filename: The file name.
+        :param params: Additional parameters for CloudSight API.
         """
         data = self._init_data(params)
         response = requests.post(REQUESTS_URL, headers={
@@ -111,11 +119,15 @@ class API(object):
         URL specified. The params parameter is optional.
         
         On success this method will immediately return a job information. Its
-        status will initially be "not completed" as it usually takes 6-12
-        seconds for the server to process an image. In order to retrieve the
-        annotation data, you need to keep updating the job status using the
-        image_response() method until the status changes. You may also use the
-        wait() method which does this automatically.
+        status will initially be :py:data:`cloudsight.STATUS_NOT_COMPLETED` as
+        it usually takes 6-12 seconds for the server to process an image. In
+        order to retrieve the annotation data, you need to keep updating the job
+        status using the :py:meth:`cloudsight.API.image_response` method until
+        the status changes. You may also use the :py:meth:`cloudsight.API.wait`
+        method which does this automatically.
+
+        :param image_url: Image URL.
+        :param params: Additional parameters for Cloudsight API.
         """
         data = self._init_data(params)
         data['image_request[remote_image_url]'] = image_url
@@ -132,7 +144,12 @@ class API(object):
         After a request has been submitted, it usually takes 6-12 seconds to
         receive a completed response. We recommend polling for a response every
         1 second after a 4 second delay from the initial request, while the
-        status is "not completed". wait() method does this automatically.
+        status is :py:data:`cloudsight.STATUS_NOT_COMPLETED`.
+        :py:meth:`cloudsight.API.wait` method does this automatically.
+
+        :param token: Job token as returned from
+                        :py:meth:`cloudsight.API.image_request` or
+                        :py:meth:`cloudsight.API.remote_image_request`
         """
         url = RESPONSES_URL + token
         response = requests.get(url, headers={
@@ -143,7 +160,12 @@ class API(object):
 
     def repost(self, token):
         """
-        Repost the job if it has timed out (STATUS_TIMEOUT).
+        Repost the job if it has timed out
+        (:py:data:`cloudsight.STATUS_TIMEOUT`).
+
+        :param token: Job token as returned from
+                        :py:meth:`cloudsight.API.image_request` or
+                        :py:meth:`cloudsight.API.remote_image_request`
         """
         url = '%s/%s/repost' % (REQUESTS_URL, token)
         response = requests.post(url, headers={
@@ -155,10 +177,15 @@ class API(object):
     def wait(self, token, timeout=DEFAULT_POLL_TIMEOUT):
         """
         Wait for the job until it has been processed. This method will block for
-        up to timeout seconds.
+        up to `timeout` seconds.
         
         This method will wait for 4 seconds after the initial request and then
-        will call image_response() method every second until the status changes.
+        will call :py:meth:`cloudsight.API.image_response` method every second
+        until the status changes.
+
+        :param token: Job token as returned from
+                        :py:meth:`cloudsight.API.image_request` or
+                        :py:meth:`cloudsight.API.remote_image_request`
         """
         delta = datetime.timedelta(seconds=timeout)
         timeout_at = datetime.datetime.now() + delta

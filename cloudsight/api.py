@@ -172,6 +172,10 @@ class API(object):
             'Authorization': self.auth.authorize('POST', url),
             'User-Agent': USER_AGENT,
         })
+
+        if response.status_code == 200:
+            return
+
         return self._unwrap_error(response)
 
     def wait(self, token, timeout=DEFAULT_POLL_TIMEOUT):

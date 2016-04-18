@@ -11,7 +11,7 @@ Status
 ======
 
 This package is currently in **beta** status. It means the API may still change
-in **backwards uncompatible** way.
+in **backwards incompatible** way.
 
 Installation
 ============

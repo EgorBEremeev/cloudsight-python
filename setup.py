@@ -11,7 +11,7 @@ tested with Python versions 2.7 and 3.5."""
 
 setup(
     name='cloudsight',
-    version='0.9',
+    version='0.9.2',
     description='CloudSight API library for Python',
     long_description=LONG_DESCRIPTION,
     license='MIT',

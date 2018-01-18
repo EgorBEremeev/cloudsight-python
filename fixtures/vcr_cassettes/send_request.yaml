@@ -1,0 +1,34 @@
+interactions:
+- request:
+    body: image_request%5Blocale%5D=en-US&image_request%5Bremote_image_url%5D=https%3A%2F%2Fstorage.googleapis.com%2Fiex%2Fapi%2Flogos%2FAAPL.png
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Authorization: [CloudSight test-request]
+      Connection: [keep-alive]
+      Content-Length: ['135']
+      Content-Type: [application/x-www-form-urlencoded]
+      User-Agent: [cloudsight-python v1.0]
+    method: POST
+    uri: https://api.cloudsightapi.com/image_requests
+  response:
+    body: {string: '{"token":"BjMGgyIZQt7QNPNZKmzq2A","url":"http://assets.cloudsight.ai/uploads/image_request/image/400/400283/400283464/AAPL.png","ttl":54.0,"status":"not
+        completed"}'}
+    headers:
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/json; charset=utf-8]
+      Date: ['Thu, 18 Jan 2018 05:51:10 GMT']
+      ETag: [W/"3a801d7c51b3f02399179031eb167c61"]
+      Server: [nginx/1.8.1]
+      Set-Cookie: [_imagetag_session=NE1STklRZmNhU1Z3VVZCcUI0TzRUWFBoZ2pjRDMvd3hQa2hnYktTRkEzVGZwTjFsdGpMaVpHUjY2RXJTaFFBMW4ySHBGR1Z5VHUzVVlwaVlmd1hMWlE9PS0tdnIzUWVjZHZsWlJwRnJhS0hvRjJmQT09--8c3c8712afc555cf4c20842df1ca4fa44fdc0ffe;
+          path=/; HttpOnly]
+      Vary: [Origin]
+      X-CloudSight-RequestRate: ['1050.259332318744']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-Request-Id: [d6f65171-09d2-41a3-85c2-482a90aa31ac]
+      X-Runtime: ['0.174431']
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1

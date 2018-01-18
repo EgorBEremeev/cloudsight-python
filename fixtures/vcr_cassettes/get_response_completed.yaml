@@ -1,0 +1,31 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Authorization: [CloudSight test-token]
+      Connection: [keep-alive]
+      User-Agent: [cloudsight-python v1.0]
+    method: GET
+    uri: https://api.cloudsightapi.com/image_responses/BjMGgyIZQt7QNPNZKmzq2A
+  response:
+    body: {string: '{"token":"BjMGgyIZQt7QNPNZKmzq2A","url":"http://assets.cloudsight.ai/uploads/image_request/image/400/400283/400283464/AAPL.png","ttl":54.0,"status":"completed","name":"Apple
+        logo"}'}
+    headers:
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/json; charset=utf-8]
+      Date: ['Thu, 18 Jan 2018 05:54:38 GMT']
+      ETag: [W/"c5ccd989a1f31a8d85afd43ba833b677"]
+      Server: [nginx/1.8.1]
+      Set-Cookie: [_imagetag_session=Y2h1cFl2WXlrd3R1RjhRUzNHMmhJekE0anRLNzY2bWhJV0dQc0N0aFNTUnRQdnlVQ0M5TVF4V1F6SmZxQjR5Um5XYjBjWFQ0Q04xckhVcHlGZWlDN0E9PS0tWnVMTitlaXN6NW9SdHhaY1JIZkJhQT09--e3fade5e78b5f59fa6e0bf3cf1418fb460d32c0e;
+          path=/; HttpOnly]
+      Vary: [Origin]
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-Request-Id: [769cfe37-93c4-47e5-a6cd-49fefbb0359a]
+      X-Runtime: ['0.018136']
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1

@@ -3,6 +3,7 @@ CloudSight API for Python
 
 [![Version](https://img.shields.io/pypi/v/cloudsight.svg?style=flat)](https://pypi.python.org/pypi/cloudsight)
 [![API Docs](https://img.shields.io/badge/api-docs-blue.svg)](https://cloudsight.github.io/cloudsight-python/)
+[![Build Status](https://travis-ci.org/cloudsight/cloudsight-python.svg?branch=master)](https://travis-ci.org/cloudsight/cloudsight-python.svg?branch=master)
 
 A simple CloudSight API Client for Python programming language. It has been
 tested with Python versions 2.7 and 3.5.

@@ -12,7 +12,7 @@ RESPONSES_URL = BASE_URL + "/image_responses/"
 
 DEFAULT_LOCALE = "en-US"
 DEFAULT_POLL_TIMEOUT = 10 * 60
-INITIAL_POLL_WAIT = 4
+DEFAULT_INITIAL_POLL_WAIT = 4
 USER_AGENT = "cloudsight-python v1.0"
 
 
@@ -178,7 +178,7 @@ class API(object):
 
         return self._unwrap_error(response)
 
-    def wait(self, token, timeout=DEFAULT_POLL_TIMEOUT):
+    def wait(self, token, timeout=DEFAULT_POLL_TIMEOUT, initialWait=DEFAULT_INITIAL_POLL_WAIT):
         """
         Wait for the job until it has been processed. This method will block for
         up to `timeout` seconds.
@@ -193,7 +193,7 @@ class API(object):
         """
         delta = datetime.timedelta(seconds=timeout)
         timeout_at = datetime.datetime.now() + delta
-        time.sleep(min(timeout, INITIAL_POLL_WAIT))
+        time.sleep(min(timeout, initialWait))
         response = self.image_response(token)
 
         while response['status'] == STATUS_NOT_COMPLETED \

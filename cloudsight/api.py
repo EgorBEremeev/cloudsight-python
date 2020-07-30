@@ -6,9 +6,9 @@ import requests
 from cloudsight import errors
 
 
-BASE_URL = "https://api.cloudsightapi.com"
-REQUESTS_URL = BASE_URL + "/image_requests"
-RESPONSES_URL = BASE_URL + "/image_responses/"
+BASE_URL = "https://api.cloudsight.ai/v1"
+REQUESTS_URL = BASE_URL + "/images"
+RESPONSES_URL = BASE_URL + "/image/"
 
 DEFAULT_LOCALE = "en-US"
 DEFAULT_POLL_TIMEOUT = 10 * 60

@@ -5,10 +5,9 @@ import requests
 
 from cloudsight import errors
 
-
 BASE_URL = "https://api.cloudsight.ai/v1"
 REQUESTS_URL = BASE_URL + "/images"
-RESPONSES_URL = BASE_URL + "/image/"
+RESPONSES_URL = BASE_URL + "/images/"
 
 DEFAULT_LOCALE = "en-US"
 DEFAULT_POLL_TIMEOUT = 10 * 60
@@ -70,6 +69,36 @@ class API(object):
         """
         self.auth = auth
 
+    def __enter__(self):
+        self.post_session = requests.Session()
+        self.post_session.headers = {
+            'Authorization': self.auth.authorize('POST', REQUESTS_URL),
+            'User-Agent': USER_AGENT,
+        }
+        self.get_session = requests.Session()
+        self.get_session.headers = {
+            'Authorization': self.auth.authorize('GET', RESPONSES_URL),
+            'User-Agent': USER_AGENT,
+        }
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.post_session.close()
+        self.get_session.close()
+        
+    
+    def injectSessions(self, post_session, get_session):
+        self.post_session = post_session
+        self.post_session.headers = {
+            'Authorization': self.auth.authorize('POST', REQUESTS_URL),
+            'User-Agent': USER_AGENT,
+        }
+        self.get_session = get_session
+        self.get_session.headers = {
+            'Authorization': self.auth.authorize('GET', RESPONSES_URL),
+            'User-Agent': USER_AGENT,
+        }
+
     def _init_data(self, params=None):
         data = {}
 
@@ -82,6 +111,7 @@ class API(object):
         return data
 
     def _unwrap_error(self, response):
+        response.raise_for_status()
         json_response = response.json()
 
         if 'error' in json_response:
@@ -107,10 +137,13 @@ class API(object):
         :param params: Additional parameters for CloudSight API.
         """
         data = self._init_data(params)
-        response = requests.post(REQUESTS_URL, headers={
-            'Authorization': self.auth.authorize('POST', REQUESTS_URL, params),
-            'User-Agent': USER_AGENT,
-        }, data=data, files={'image_request[image]': (filename, image)})
+        response = self.post_session.post(REQUESTS_URL,
+                                          data=data,
+                                          files={'image_request[image]': (filename, image)})
+        # response = requests.post(REQUESTS_URL, headers={
+        #     'Authorization': self.auth.authorize('POST', REQUESTS_URL, params),
+        #     'User-Agent': USER_AGENT,
+        # }, data=data, files={'image_request[image]': (filename, image)})
         return self._unwrap_error(response)
 
     def remote_image_request(self, image_url, params=None):
@@ -130,14 +163,15 @@ class API(object):
         :param params: Additional parameters for CloudSight API.
         """
         data = self._init_data(params)
-        data['image_request[remote_image_url]'] = image_url
-        response = requests.post(REQUESTS_URL, headers={
-            'Authorization': self.auth.authorize('POST', REQUESTS_URL, data),
-            'User-Agent': USER_AGENT,
-        }, data=data)
+        data['remote_image_url'] = image_url
+        response = self.post_session.post(REQUESTS_URL, data=data)
+        # response = requests.post(REQUESTS_URL, headers={
+        #     'Authorization': self.auth.authorize('POST', REQUESTS_URL, data),
+        #     'User-Agent': USER_AGENT,
+        # }, data=data)
         return self._unwrap_error(response)
 
-    def image_response(self, token):
+    def image_response(self, token, session=None):
         """
         Contact the server and update the job status.
         
@@ -150,12 +184,22 @@ class API(object):
         :param token: Job token as returned from
                         :py:meth:`cloudsight.API.image_request` or
                         :py:meth:`cloudsight.API.remote_image_request`
+        :param session: The Session object to make requests within
+        
         """
         url = RESPONSES_URL + token
-        response = requests.get(url, headers={
-            'Authorization': self.auth.authorize('GET', url),
-            'User-Agent': USER_AGENT,
-        })
+        response = self.get_session.get(url) 
+        # if session:
+        #     response = session.get(url, headers={
+        #         'Authorization': self.auth.authorize('GET', url),
+        #         'User-Agent': USER_AGENT,
+        #     })
+            
+        # else:
+        #     response = requests.get(url, headers={
+        #         'Authorization': self.auth.authorize('GET', url),
+        #         'User-Agent': USER_AGENT,
+        #     })
         return self._unwrap_error(response)
 
     def repost(self, token):
@@ -168,10 +212,12 @@ class API(object):
                         :py:meth:`cloudsight.API.remote_image_request`
         """
         url = '%s/%s/repost' % (REQUESTS_URL, token)
-        response = requests.post(url, headers={
-            'Authorization': self.auth.authorize('POST', url),
-            'User-Agent': USER_AGENT,
-        })
+        response = self.post_session.post(url)
+        
+        # response = requests.post(url, headers={
+        #     'Authorization': self.auth.authorize('POST', url),
+        #     'User-Agent': USER_AGENT,
+        # })
 
         if response.status_code == 200:
             return
@@ -194,11 +240,20 @@ class API(object):
         delta = datetime.timedelta(seconds=timeout)
         timeout_at = datetime.datetime.now() + delta
         time.sleep(min(timeout, initialWait))
+        
         response = self.image_response(token)
-
+    
         while response['status'] == STATUS_NOT_COMPLETED \
               and datetime.datetime.now() < timeout_at:
             time.sleep(1)
             response = self.image_response(token)
+        
+        # with requests.Session() as s:
+        #     response = self.image_response(token, s)
+    
+        #     while response['status'] == STATUS_NOT_COMPLETED \
+        #           and datetime.datetime.now() < timeout_at:
+        #         time.sleep(1)
+        #         response = self.image_response(token, s)
 
         return response
